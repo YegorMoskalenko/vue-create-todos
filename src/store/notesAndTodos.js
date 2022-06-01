@@ -1,9 +1,3 @@
-import VuexPersistence from 'vuex-persist'
-const vuexLocalStorage = new VuexPersistence({
-    supportCircular: true,
-    key: 'vuex',
-    storage: window.localStorage
-})
 export const notesAndTodos = {
     state: () => ({
         notes: [],
@@ -11,6 +5,9 @@ export const notesAndTodos = {
         getNotes: {}
     }),
     mutations: {
+        addNote(state, note){
+            state.notes.push(note)
+        },
         setGetNotes(state, getNotes){
           state.getNotes = getNotes
         },
@@ -28,6 +25,5 @@ export const notesAndTodos = {
             commit('setDialogVisibleNote', false)
         }
     },
-    plugins: [vuexLocalStorage.plugin],
     namespaced: true
 }
