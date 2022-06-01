@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     createTodoEmit(){
-      this.todo.complited = false
+      this.todo.completed = false
       this.$emit('createTodo', this.todo)
     }
   },

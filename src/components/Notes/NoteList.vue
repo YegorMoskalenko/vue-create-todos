@@ -1,6 +1,6 @@
 <template>
     <NoteItem
-        v-for="(note, id) in notes"
+        v-for="(note, id) in this.notes"
         :note="note"
         :id="id"
         @remove="onRemove"

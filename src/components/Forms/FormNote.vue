@@ -24,12 +24,6 @@ export default {
   },
   methods: {
     createNote(){
-      if(this.notes.length >= 1){
-        this.note.id = this.notes[this.notes.length - 1].id + 1
-      }
-      else {
-        this.note.id = 1
-      }
       this.note.todos = []
       this.$emit('createNote', this.note)
     }

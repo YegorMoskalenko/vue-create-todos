@@ -46,7 +46,7 @@ export default {
       id: this.$route.params.id,
       dialogVisible: false,
       dialogVisibleTodo: false,
-      getTodo: {},
+      getTodo: {}
     }
   },
   computed: {
@@ -70,9 +70,6 @@ export default {
       this.notes[this.id].todos.splice(this.getTodo, 1)
       this.dialogVisibleTodo = false
     }
-  },
-  mounted() {
-    console.log(this.id)
   }
 }
 </script>

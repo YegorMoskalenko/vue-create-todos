@@ -47,9 +47,6 @@ export default {
     ...mapState({
       notes: state => state.notesAndTodos.notes
     }),
-  },
-  mounted() {
-    console.log(this.note, this.id)
   }
 }
 </script>
