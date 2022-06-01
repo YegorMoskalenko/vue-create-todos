@@ -17,7 +17,7 @@
 <script>
 import NoteList from "@/components/Notes/NoteList";
 import FormNote from "@/components/Forms/FormNote";
-import {mapState} from 'vuex'
+import {mapState, mapMutations} from 'vuex'
 
 export default {
   components: {
@@ -30,11 +30,14 @@ export default {
     }
   },
   methods: {
+    ...mapMutations({
+      addNote: 'notesAndTodos/addNote'
+    }),
     openDialog(){
       this.dialogVisible = true
     },
     createNote(note){
-      this.notes.push(note)
+      this.addNote(note)
       this.dialogVisible = false
     }
   },
