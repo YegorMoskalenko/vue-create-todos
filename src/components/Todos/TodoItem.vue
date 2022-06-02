@@ -6,8 +6,8 @@
         <h4 class="todo__title">{{this.todo.todoTitle}}</h4>
       </div>
       <div class="todos__actions">
-        <theme-button v-if="this.todo.completed === true" class="btns__actions" @click="this.todo.completed = false">Not done</theme-button>
-        <theme-button v-else class="btns__actions" @click="this.todo.completed = true">Done</theme-button>
+        <theme-button v-if="this.todo.completed === true" class="btns__actions" @click="todoNotDone">Not done</theme-button>
+        <theme-button v-else class="btns__actions" @click="todoDone">Done</theme-button>
 
         <theme-button class="btns__actions btn__edit" @click="this.dialogVisibleTodoEdit = true">Edit Todo</theme-button>
         <theme-button class="btns__actions" @click="$emit('removeTodo', this.todoId)">Remove Todo</theme-button>
@@ -15,7 +15,7 @@
     </div>
 
     <dialog-window v-model:showDialog="dialogVisibleTodoEdit" class="dialog__edit">
-      <theme-input placeholder="Edit todo" v-model="this.todoTitleModel" id="input__edit"/>
+      <theme-input placeholder="Edit todo" v-model="todoTitleModel" id="input__edit"/>
       <theme-button @click="pushEdit">Edit</theme-button>
     </dialog-window>
 
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import {mapState, mapMutations} from 'vuex'
 export default {
   data(){
     return {
@@ -39,10 +39,23 @@ export default {
     todoId: Number
   },
   methods: {
+    ...mapMutations({
+      todoDoneMutation: 'notesAndTodos/todoDoneMutation',
+      todoNotDoneMutation: 'notesAndTodos/todoNotDoneMutation',
+      changeTodoTitleModel: 'notesAndTodos/changeTodoTitleModel',
+      changeTodoTitle: 'notesAndTodos/changeTodoTitle'
+    }),
     pushEdit(){
-      this.todo.todoTitle = this.todoTitleModel
+      this.changeTodoTitleModel(this.todoTitleModel)
+      this.changeTodoTitle(this.todo)
       this.dialogVisibleTodoEdit = false
       this.todoTitleModel = ''
+    },
+    todoDone(){
+      this.todoDoneMutation(this.todo)
+    },
+    todoNotDone(){
+      this.todoNotDoneMutation(this.todo)
     }
   },
   computed: {

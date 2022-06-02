@@ -24,7 +24,7 @@
 
 <script>
 import NoteItemPage from "@/pages/NoteItemPage";
-import {mapState, mapActions} from 'vuex'
+import {mapState} from 'vuex'
 export default {
   components: {
     NoteItemPage
@@ -36,9 +36,6 @@ export default {
     id: Number
   },
   methods: {
-    ...mapActions({
-      removeNote: 'notesAndTodos/removeNote'
-    }),
     emitId(){
       this.$emit('remove', this.id)
     }

@@ -9,16 +9,19 @@
     <div class="__todos">
       <theme-button id="add__todo" @click="openForm">Add Todo</theme-button>
       <strong class="title-todos">TODOS:</strong>
+      <transition-group name="todos">
       <TodoItem
           @removeTodo="removeTodo"
           v-if="this.notes[this.id].todos.length >= 1"
           v-for="(todo, todoId) in this.notes[this.id].todos"
           :todo="todo"
           :todoId="todoId"
+          :key="todoId"
       />
-      <div v-else>
-        <h3 class="else__todos__title">You need to add todos!</h3>
-      </div>
+        <div v-else>
+          <h3 class="else__todos__title">You need to add todos!</h3>
+        </div>
+      </transition-group>
     </div>
 
     <dialog-window v-model:showDialog="dialogVisible">
@@ -33,7 +36,7 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import {mapState, mapMutations} from 'vuex'
 import FormTodo from "@/components/Forms/FormTodo";
 import TodoItem from "@/components/Todos/TodoItem";
 export default {
@@ -46,7 +49,7 @@ export default {
       id: this.$route.params.id,
       dialogVisible: false,
       dialogVisibleTodo: false,
-      getTodo: {}
+      getTodoId: {}
     }
   },
   computed: {
@@ -55,19 +58,26 @@ export default {
     }),
   },
   methods: {
+    ...mapMutations({
+      addTodo: 'notesAndTodos/addTodo',
+      changeNoteId: 'notesAndTodos/changeNoteId',
+      removeTodoMutation: 'notesAndTodos/removeTodoMutation'
+    }),
     openForm(){
       this.dialogVisible = true
     },
     createTodo(todo){
-      this.notes[this.id].todos.push(todo)
+      this.changeNoteId(this.id)
+      this.addTodo(todo)
       this.dialogVisible = false
     },
     removeTodo(todoId){
       this.dialogVisibleTodo = true
-      this.getTodo = todoId
+      this.getTodoId = todoId
     },
     removeTodoСonfirm(){
-      this.notes[this.id].todos.splice(this.getTodo, 1)
+      this.changeNoteId(this.id)
+      this.removeTodoMutation(this.getTodoId)
       this.dialogVisibleTodo = false
     }
   }
@@ -168,5 +178,18 @@ export default {
       }
     }
   }
+}
+.todos-item {
+  display: inline-block;
+  margin-right: 10px;
+}
+.todos-enter-active,
+.todos-leave-active {
+  transition: all 1s ease;
+}
+.todos-enter-from,
+.todos-leave-to {
+  opacity: 0;
+  transform: translateX(100px);
 }
 </style>

@@ -1,18 +1,21 @@
 <template>
+  <transition-group name="notes">
     <NoteItem
         v-for="(note, id) in this.notes"
         :note="note"
         :id="id"
+        :key="id"
         @remove="onRemove"
     />
-    <dialog-window v-model:showDialog="dialogVisibleNote" class="dialog__remove__note" @click="setDialogVisibleNote">
+  </transition-group>
+    <dialog-window v-model:showDialog="this.dialogVisibleNote" class="dialog__remove__note" @click="this.setDialogVisibleNote">
       <strong style="margin-right: 10px">Confirm the note deletion !!!</strong>
-      <theme-button @click="removeNoteConfirm(this.onId)">Remove the Note</theme-button>
+      <theme-button @click="removeNoteConfirm">Remove the Note</theme-button>
     </dialog-window>
 </template>
 
 <script>
-import {mapState, mapActions, mapMutations} from 'vuex'
+import {mapState, mapMutations} from 'vuex'
 import NoteItem from "@/components/Notes/NoteItem";
 export default {
   data(){
@@ -25,14 +28,16 @@ export default {
   },
   methods: {
     ...mapMutations({
-      setDialogVisibleNote: "notesAndTodos/setDialogVisibleNote"
-    }),
-    ...mapActions({
-      removeNoteConfirm: 'notesAndTodos/removeNoteConfirm'
+      setDialogVisibleNote: "notesAndTodos/setDialogVisibleNote",
+      removeNoteConfirmAction: "notesAndTodos/removeNoteConfirmMutation"
     }),
     onRemove(id){
       this.onId = id
       this.setDialogVisibleNote(true)
+    },
+    removeNoteConfirm(){
+      this.removeNoteConfirmAction(this.onId)
+      this.setDialogVisibleNote(false)
     }
   },
   computed:{
@@ -53,5 +58,17 @@ export default {
     align-items: center;
   }
 }
-
+.notes-item {
+  display: inline-block;
+  margin-right: 10px;
+}
+.notes-enter-active,
+.notes-leave-active {
+  transition: all 1s ease;
+}
+.notes-enter-from,
+.notes-leave-to {
+  opacity: 0;
+  transform: translateX(100px);
+}
 </style>
